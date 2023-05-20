@@ -1,5 +1,6 @@
 <template>
-  <div class="image-container container-fluid">
+  <div @click="toggleMusic" class="image-container container-fluid">
+    {{ isPlaying ? '' : '' }}
     <div class="row text-center">
       <div class="col-3 px-5 mt-5">
         <img class="img-presentation" src="./icons/Img-2.webp" alt="Descripción de la imagen" />
@@ -9,25 +10,59 @@
         <p class="text spaceds">¡Prepárate para la guerra!</p>
         <a href="#" class="btn-init btn-lineage">Join Now</a>
         <a href="/register" class="btn-init btn-lineage">Sign Up</a>
-        <br>
+        <br />
         <img class="img" src="./icons/Img-4.png" alt="Descripción de la imagen" />
-      </div>
+      </div> 
+    </div>
+    <div>
     </div>
   </div>
 </template>
 
 <script>
-import TheHeaderVue from '@/components/TheHeader.vue'
+import sound from './music/intro.mp3';
+
 export default {
   name: 'MiComponente',
-  components: {
-    TheHeaderVue
-  },
   data() {
-    return {}
+    return {
+      audio: null,
+      isPlaying: false
+    }
+  },
+  mounted() {
+    this.audio = new Audio(sound);
+    this.audio.addEventListener('play', () => {
+      this.isPlaying = true;
+    });
+    this.audio.addEventListener('pause', () => {
+      this.isPlaying = false;
+    });
+  },
+  methods: {
+    playMusic() {
+      if (!this.isPlaying) {
+        this.audio.play();
+      }
+    },
+    stopMusic() {
+      if (this.isPlaying) {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.isPlaying = false;
+      }
+    },
+    toggleMusic() {
+      if (this.isPlaying) {
+        this.stopMusic();
+      } else {
+        this.playMusic();
+      }
+    }
   }
 }
 </script>
+
 <style>
 .image-container {
   background-image: url('./icons/Iconsbg.jpg');
@@ -59,7 +94,7 @@ export default {
   transform: translate(-14%);
 }
 
-.spaceds{
+.spaceds {
   margin-bottom: 35px;
 }
 
@@ -91,7 +126,7 @@ export default {
   height: 100%;
 }
 
-.img-presentation{
+.img-presentation {
   height: 545px;
   width: 320px;
 }
